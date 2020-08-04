@@ -2,7 +2,7 @@ import pathlib
 
 from setuptools import setup
 
-setup(name='fdlogs',
+setup(name='hllogs',
       version='0.1.0',
       author='xmonarch',
       author_email='xmonarch64@gmail.com',
