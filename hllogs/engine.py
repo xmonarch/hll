@@ -69,11 +69,13 @@ def process():
                     if rule.matches(line_lower):
                         line_rule = rule
                         break
-                print(highlight(join(tokenize(Item(line)), line_rule.ascii_escapes), line_rule.ascii_escapes))
+                print(highlight(join(tokenize(Item(line)), line_rule.ascii_escapes), line_rule.ascii_escapes,
+                                line_rule.ascii_escapes))
             except EOFError:
                 break
     except KeyboardInterrupt:
         sys.exit(0)
 
-# TODO fix colorizing highlights
 # TODO fix empty line breaking hllogs
+# TODO easily generate regexps
+# TODO comments
