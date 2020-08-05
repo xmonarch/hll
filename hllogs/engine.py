@@ -4,7 +4,7 @@ from typing import List
 
 from hllogs.ascii import Ascii
 from hllogs.highlights import HIGHLIGHTS
-from hllogs.levels import DEFAULT_RULE, RULES
+from hllogs.levels import DEFAULT_RULE, RULES, LogLevelRule
 
 
 class Item(object):
@@ -51,10 +51,10 @@ def tokenize(item: Item) -> List[Item]:
     return tokenized if len(tokenized) > 0 else [item]
 
 
-def join(tokens: List[Item], line_escapes: str) -> str:
+def join(tokens: List[Item], line: LogLevelRule) -> str:
     complete: str = ''
     for token in tokens:
-        complete += highlight(token.value, Ascii.HIGHLIGHT, line_escapes) if token.is_token else token.value
+        complete += highlight(token.value, line.highlight_escapes, line.line_escapes) if token.is_token else token.value
     return complete
 
 
@@ -69,13 +69,8 @@ def process():
                     if rule.matches(line_lower):
                         line_rule = rule
                         break
-                print(highlight(join(tokenize(Item(line)), line_rule.ascii_escapes), line_rule.ascii_escapes,
-                                line_rule.ascii_escapes))
+                print(highlight(join(tokenize(Item(line)), line_rule), line_rule.line_escapes, ''))
             except EOFError:
                 break
     except KeyboardInterrupt:
         sys.exit(0)
-
-# TODO fix empty line breaking hllogs
-# TODO easily generate regexps
-# TODO comments

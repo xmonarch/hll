@@ -12,4 +12,3 @@ class Ascii:
     MAGENTA = '\033[95m'
     CYAN = '\033[96m'
     WHITE = '\033[97m'
-    HIGHLIGHT = REVERSE + BOLD

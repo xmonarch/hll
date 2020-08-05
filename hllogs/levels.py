@@ -5,9 +5,10 @@ from hllogs.ascii import Ascii
 
 class LogLevelRule:
 
-    def __init__(self, contains: List[str], ascii_escapes: List[str]):
+    def __init__(self, contains: List[str], line_escapes: List[str], highlight_escapes: List[str]):
         self.contains: List[str] = contains
-        self.ascii_escapes: str = ''.join(ascii_escapes)
+        self.line_escapes: str = ''.join(line_escapes)
+        self.highlight_escapes: str = ''.join(highlight_escapes)
 
     def matches(self, line: str):
         for contain in self.contains:
@@ -16,11 +17,11 @@ class LogLevelRule:
 
 
 RULES: List[LogLevelRule] = [
-    LogLevelRule(['critical'], [Ascii.UNDERLINE, Ascii.BOLD, Ascii.RED]),
-    LogLevelRule(['fatal'], [Ascii.BOLD, Ascii.RED]),
-    LogLevelRule(['error', ' e '], [Ascii.RED]),
-    LogLevelRule(['warn', ' w '], [Ascii.YELLOW]),
-    LogLevelRule(['debug', ' d '], [Ascii.GREEN]),
+    LogLevelRule(['critical'], [Ascii.UNDERLINE, Ascii.BOLD, Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
+    LogLevelRule(['fatal'], [Ascii.BOLD, Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
+    LogLevelRule(['error', ' e '], [Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
+    LogLevelRule(['warn', ' w '], [Ascii.YELLOW], [Ascii.BOLD, Ascii.RED]),
+    LogLevelRule(['debug', ' d '], [Ascii.GREEN], [Ascii.BOLD, Ascii.YELLOW]),
 ]
 
-DEFAULT_RULE = LogLevelRule([], [Ascii.END])
+DEFAULT_RULE = LogLevelRule([], [Ascii.END], [Ascii.BOLD, Ascii.BLUE])
