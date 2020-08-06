@@ -3,9 +3,9 @@
 hllogs (`h`igh`l`ight `logs`) is a simple log colorizer and highlighter written in python.
 
 Features:
-- attempt basic log level auto-detection
-- highlight key phrases
-- extract and pretty-print logged XML and JSON documents
+- attempts basic log level auto-detection and colorizes output accordingly
+- highlights key phrases in the output
+- extracts and pretty-prints logged XML and JSON documents
 
 ## Screenshots
 
@@ -24,7 +24,3 @@ TBD
 Pipe any input in:
 
 `$ tail -f ~/somelogfile.log | hllogs`
-
-## TODO
-
-- fix empty lines breaking hllogs

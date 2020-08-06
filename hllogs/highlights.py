@@ -33,22 +33,30 @@ class Highlighter(object):
 """
 List of all registered highlighters
 """
-
 LOG_HIGHLIGHTERS: List[Highlighter] = [
+    # URLs
+    Highlighter(re.compile(r"\w+://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"), positive=True),
+    # key phrases
+    Highlighter(re.compile('unsuccessfully', re.IGNORECASE)),
     Highlighter(re.compile('disconnected', re.IGNORECASE)),
+    Highlighter(re.compile('unsuccessful', re.IGNORECASE)),
     Highlighter(re.compile('successfully', re.IGNORECASE), positive=True),
+    Highlighter(re.compile('uninstalled', re.IGNORECASE)),
     Highlighter(re.compile('installing', re.IGNORECASE), positive=True),
     Highlighter(re.compile('dismounted', re.IGNORECASE)),
+    Highlighter(re.compile('successful', re.IGNORECASE), positive=True),
     Highlighter(re.compile('connected', re.IGNORECASE), positive=True),
     Highlighter(re.compile('installed', re.IGNORECASE), positive=True),
     Highlighter(re.compile('disabling', re.IGNORECASE)),
     Highlighter(re.compile('completed', re.IGNORECASE), positive=True),
     Highlighter(re.compile('exception', re.IGNORECASE), raise_level=logging.ERROR),
+    Highlighter(re.compile('enabling', re.IGNORECASE), positive=True),
     Highlighter(re.compile('critical', re.IGNORECASE), raise_level=logging.CRITICAL),
     Highlighter(re.compile('starting', re.IGNORECASE), positive=True),
     Highlighter(re.compile('disabled', re.IGNORECASE)),
     Highlighter(re.compile('stopping', re.IGNORECASE)),
     Highlighter(re.compile('shutdown', re.IGNORECASE)),
+    Highlighter(re.compile('enabled', re.IGNORECASE), positive=True),
     Highlighter(re.compile('warning', re.IGNORECASE), raise_level=logging.WARNING),
     Highlighter(re.compile('started', re.IGNORECASE), positive=True),
     Highlighter(re.compile('stopped', re.IGNORECASE)),
@@ -60,6 +68,6 @@ LOG_HIGHLIGHTERS: List[Highlighter] = [
     Highlighter(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
     Highlighter(re.compile('error', re.IGNORECASE), raise_level=logging.ERROR),
     Highlighter(re.compile('debug', re.IGNORECASE), raise_level=logging.DEBUG),
-    Highlighter(re.compile(r'ORA-\d+')),
-    Highlighter(re.compile(r'port \d+', re.IGNORECASE), positive=True)
+    # ORACLE codes
+    Highlighter(re.compile(r'ORA-\d+'))
 ]
