@@ -9,7 +9,7 @@ class Highlight(object):
     raise_level: int
     positive: bool
 
-    def __init__(self, expression: Pattern, raise_level: int = logging.INFO, positive: bool = False):
+    def __init__(self, expression: Pattern, raise_level: int = logging.NOTSET, positive: bool = False):
         self.expression = expression
         self.raise_level = raise_level
         self.positive = positive
@@ -40,5 +40,6 @@ LOG_HIGHLIGHTS: List[Highlight] = [
     Highlight(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
     Highlight(re.compile('error', re.IGNORECASE), raise_level=logging.ERROR),
     Highlight(re.compile('debug', re.IGNORECASE), raise_level=logging.DEBUG),
-    Highlight(re.compile(r'ORA-\d+'))
+    Highlight(re.compile(r'ORA-\d+')),
+    Highlight(re.compile(r'port \d+', re.IGNORECASE), positive=True)
 ]
