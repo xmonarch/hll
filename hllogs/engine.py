@@ -5,6 +5,7 @@ from typing import List
 
 from hllogs.ascii import Ascii
 from hllogs.highlights import LOG_HIGHLIGHTERS, Highlighter
+from hllogs.json import extract_json_attachments
 from hllogs.levels import LOG_LEVELS, LogLevelRule
 from hllogs.xml import extract_xml_attachments
 
@@ -142,6 +143,13 @@ def process():
                         action="store_const",
                         default=True,
                         const=False)
+    parser.add_argument("-j",
+                        "--no-json",
+                        dest="json",
+                        help="don't detect json contents",
+                        action="store_const",
+                        default=True,
+                        const=False)
     args = parser.parse_args(sys.argv[1:])
 
     """
@@ -164,8 +172,14 @@ def process():
 
                 if args.xml:
                     # extract XML attachments
-                    for index, xml in enumerate(extract_xml_attachments(line)):
-                        print(highlight(f": XML {index + 1} :", Ascii.MAGENTA + Ascii.REVERSE + Ascii.BOLD, ''))
+                    for xml in extract_xml_attachments(line):
+                        print(highlight(" > XML  ", Ascii.MAGENTA + Ascii.REVERSE + Ascii.BOLD, ''))
+                        print(highlight(xml, Ascii.MAGENTA, ''))
+
+                if args.json:
+                    # extract XML attachments
+                    for xml in extract_json_attachments(line):
+                        print(highlight(" > JSON ", Ascii.MAGENTA + Ascii.REVERSE + Ascii.BOLD, ''))
                         print(highlight(xml, Ascii.MAGENTA, ''))
 
             except EOFError:

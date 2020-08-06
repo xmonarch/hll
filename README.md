@@ -5,7 +5,7 @@ hllogs (`h`igh`l`ight `logs`) is a simple log colorizer and highlighter written 
 Features:
 - attempt basic log level auto-detection
 - highlight key phrases
-- extract and pretty-print logged XML documents
+- extract and pretty-print logged XML and JSON documents
 
 ## Screenshots
 
@@ -28,4 +28,3 @@ Pipe any input in:
 ## TODO
 
 - fix empty lines breaking hllogs
-- extract and pretty format JSON data from input
