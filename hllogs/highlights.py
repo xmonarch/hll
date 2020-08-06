@@ -33,6 +33,7 @@ class Highlighter(object):
 """
 List of all registered highlighters
 """
+
 LOG_HIGHLIGHTERS: List[Highlighter] = [
     Highlighter(re.compile('disconnected', re.IGNORECASE)),
     Highlighter(re.compile('successfully', re.IGNORECASE), positive=True),
@@ -51,9 +52,10 @@ LOG_HIGHLIGHTERS: List[Highlighter] = [
     Highlighter(re.compile('warning', re.IGNORECASE), raise_level=logging.WARNING),
     Highlighter(re.compile('started', re.IGNORECASE), positive=True),
     Highlighter(re.compile('stopped', re.IGNORECASE)),
-    Highlighter(re.compile('missing', re.IGNORECASE)),
+    Highlighter(re.compile('missing', re.IGNORECASE), raise_level=logging.WARNING),
+    Highlighter(re.compile('cannot', re.IGNORECASE), raise_level=logging.WARNING),
     Highlighter(re.compile('severe', re.IGNORECASE), raise_level=logging.ERROR),
-    Highlighter(re.compile('failed', re.IGNORECASE)),
+    Highlighter(re.compile('failed', re.IGNORECASE), raise_level=logging.WARNING),
     Highlighter(re.compile('closed', re.IGNORECASE)),
     Highlighter(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
     Highlighter(re.compile('error', re.IGNORECASE), raise_level=logging.ERROR),

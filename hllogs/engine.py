@@ -1,3 +1,4 @@
+import argparse
 import logging
 import sys
 from typing import List
@@ -5,6 +6,7 @@ from typing import List
 from hllogs.ascii import Ascii
 from hllogs.highlights import LOG_HIGHLIGHTERS, Highlighter
 from hllogs.levels import LOG_LEVELS, LogLevelRule
+from hllogs.xml import extract_xml_attachments
 
 
 class Token(object):
@@ -130,6 +132,19 @@ def join(tokens: List[Token], line: LogLevelRule) -> str:
 
 def process():
     """
+    Parse CLI arguments
+    """
+    parser = argparse.ArgumentParser(description="Colorize and highlight logs")
+    parser.add_argument("-x",
+                        "--no-xml",
+                        dest="xml",
+                        help="don't detect xml contents",
+                        action="store_const",
+                        default=True,
+                        const=False)
+    args = parser.parse_args(sys.argv[1:])
+
+    """
     Process lines from input one by one and highlight configured phrases
     """
     try:
@@ -146,6 +161,13 @@ def process():
 
                 # colorize according to the level rule
                 print(highlight(join(items, log_level), log_level.line, ''))
+
+                if args.xml:
+                    # extract XML attachments
+                    for index, xml in enumerate(extract_xml_attachments(line)):
+                        print(highlight(f": XML {index + 1} :", Ascii.MAGENTA + Ascii.REVERSE + Ascii.BOLD, ''))
+                        print(highlight(xml, Ascii.MAGENTA, ''))
+
             except EOFError:
                 # once we run out of input we're done
                 break
