@@ -1,32 +1,36 @@
+import logging
 import sys
-from re import Pattern
 from typing import List
 
 from hllogs.ascii import Ascii
-from hllogs.highlights import HIGHLIGHTS
-from hllogs.levels import DEFAULT_RULE, RULES, LogLevelRule
+from hllogs.highlights import LOG_HIGHLIGHTS, Highlight
+from hllogs.levels import LOG_LEVELS, LogLevelRule
 
 
 class Item(object):
 
-    def __init__(self, value: str, is_token: bool = False):
+    def __init__(self, value: str, is_token: bool = False, raise_level: int = logging.NOTSET,
+                 is_positive: bool = False):
         self.value: str = value
-        self.is_token = is_token
+        self.is_token: bool = is_token
+        self.raise_level: int = raise_level
+        self.is_positive: bool = is_positive
 
 
 def highlight(value: str, escape: str, line_escapes: str) -> str:
     return f"{escape}{value}{Ascii.END}{line_escapes}"
 
 
-def split(expression: Pattern, value: str) -> List[Item]:
+def split(expression: Highlight, value: str) -> List[Item]:
     results: List[Item] = []
     position: int = 0
     matched: bool = False
-    for match in expression.finditer(value):
+    for match in expression.expression.finditer(value):
         matched = True
         if position < match.start():
             results.append(Item(value[position:match.start()]))
-        results.append(Item(value[match.start():match.end()], is_token=True))
+        results.append(Item(value[match.start():match.end()], is_positive=expression.positive, is_token=True,
+                            raise_level=expression.raise_level))
         position = match.end()
     if matched and position < len(value):
         results.append(Item(value[position:]))
@@ -39,7 +43,7 @@ def tokenize(item: Item) -> List[Item]:
     if item.is_token or length < 4:
         return [item]
     tokenized = []
-    for expression in HIGHLIGHTS:
+    for expression in LOG_HIGHLIGHTS:
         parts = split(expression, item.value)
         if len(parts) > 0:
             for part in parts:
@@ -54,22 +58,19 @@ def tokenize(item: Item) -> List[Item]:
 def join(tokens: List[Item], line: LogLevelRule) -> str:
     complete: str = ''
     for token in tokens:
-        complete += highlight(token.value, line.highlight_escapes, line.line_escapes) if token.is_token else token.value
+        complete += highlight(token.value, line.positive if token.is_positive else line.negative,
+                              line.line) if token.is_token else token.value
     return complete
 
 
 def process():
     try:
         while True:
-            line_rule = DEFAULT_RULE
             try:
                 line: str = input()
-                line_lower: str = line.lower()
-                for rule in RULES:
-                    if rule.matches(line_lower):
-                        line_rule = rule
-                        break
-                print(highlight(join(tokenize(Item(line)), line_rule), line_rule.line_escapes, ''))
+                items: List[Item] = tokenize(Item(line))
+                log_level: LogLevelRule = LOG_LEVELS[max(items, key=lambda item: item.raise_level).raise_level]
+                print(highlight(join(items, log_level), log_level.line, ''))
             except EOFError:
                 break
     except KeyboardInterrupt:

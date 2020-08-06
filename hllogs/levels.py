@@ -1,27 +1,26 @@
-from typing import List
+import logging
+from typing import List, Dict
 
 from hllogs.ascii import Ascii
 
 
 class LogLevelRule:
 
-    def __init__(self, contains: List[str], line_escapes: List[str], highlight_escapes: List[str]):
-        self.contains: List[str] = contains
-        self.line_escapes: str = ''.join(line_escapes)
-        self.highlight_escapes: str = ''.join(highlight_escapes)
-
-    def matches(self, line: str):
-        for contain in self.contains:
-            if contain in line:
-                return True
+    def __init__(self, line: List[str], positive: List[str], negative: List[str]):
+        self.line: str = ''.join(line)
+        self.positive: str = ''.join(positive)
+        self.negative: str = ''.join(negative)
 
 
-RULES: List[LogLevelRule] = [
-    LogLevelRule(['critical'], [Ascii.UNDERLINE, Ascii.BOLD, Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
-    LogLevelRule(['fatal'], [Ascii.BOLD, Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
-    LogLevelRule(['error', ' e '], [Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]),
-    LogLevelRule(['warn', ' w '], [Ascii.YELLOW], [Ascii.BOLD, Ascii.RED]),
-    LogLevelRule(['debug', ' d '], [Ascii.GREEN], [Ascii.BOLD, Ascii.YELLOW]),
-]
-
-DEFAULT_RULE = LogLevelRule([], [Ascii.END], [Ascii.BOLD, Ascii.BLUE])
+LOG_LEVELS: Dict[int, LogLevelRule] = dict()
+LOG_LEVELS[logging.NOTSET] = LogLevelRule([Ascii.END], [Ascii.GREEN], [Ascii.BOLD, Ascii.RED])
+LOG_LEVELS[logging.INFO] = LogLevelRule([Ascii.END], [Ascii.GREEN], [Ascii.BOLD, Ascii.RED])
+LOG_LEVELS[logging.DEBUG] = LogLevelRule([Ascii.GREEN], [Ascii.BOLD, Ascii.BLUE], [Ascii.BOLD, Ascii.RED])
+LOG_LEVELS[logging.WARNING] = LogLevelRule([Ascii.YELLOW], [Ascii.BOLD, Ascii.GREEN], [Ascii.BOLD, Ascii.RED])
+LOG_LEVELS[logging.ERROR] = LogLevelRule([Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.GREEN],
+                                         [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW])
+LOG_LEVELS[logging.FATAL] = LogLevelRule([Ascii.BOLD, Ascii.RED], [Ascii.BOLD, Ascii.UNDERLINE, Ascii.GREEN],
+                                         [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW])
+LOG_LEVELS[logging.CRITICAL] = LogLevelRule([Ascii.UNDERLINE, Ascii.BOLD, Ascii.RED],
+                                            [Ascii.BOLD, Ascii.UNDERLINE, Ascii.GREEN],
+                                            [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW])

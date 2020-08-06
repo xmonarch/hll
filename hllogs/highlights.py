@@ -1,31 +1,43 @@
+import logging
 import re
+from re import Pattern
 from typing import List
 
-# CONTENT AUTO-GENERATED
-HIGHLIGHTS: List[str] = [
-    re.compile('disconnected', re.IGNORECASE),
-    re.compile('successfully', re.IGNORECASE),
-    re.compile('installing', re.IGNORECASE),
-    re.compile('dismounted', re.IGNORECASE),
-    re.compile('connected', re.IGNORECASE),
-    re.compile('installed', re.IGNORECASE),
-    re.compile('disabling', re.IGNORECASE),
-    re.compile('completed', re.IGNORECASE),
-    re.compile('exception', re.IGNORECASE),
-    re.compile('critical', re.IGNORECASE),
-    re.compile('starting', re.IGNORECASE),
-    re.compile('disabled', re.IGNORECASE),
-    re.compile('stopping', re.IGNORECASE),
-    re.compile('shutdown', re.IGNORECASE),
-    re.compile('warning', re.IGNORECASE),
-    re.compile('started', re.IGNORECASE),
-    re.compile('stopped', re.IGNORECASE),
-    re.compile('missing', re.IGNORECASE),
-    re.compile('failed', re.IGNORECASE),
-    re.compile('closed', re.IGNORECASE),
-    re.compile('fatal', re.IGNORECASE),
-    re.compile('error', re.IGNORECASE),
-    re.compile('debug', re.IGNORECASE),
-    re.compile('ready', re.IGNORECASE),
-    re.compile(r'ORA-\d+'),
+
+class Highlight(object):
+    expression: Pattern
+    raise_level: int
+    positive: bool
+
+    def __init__(self, expression: Pattern, raise_level: int = logging.NOTSET, positive: bool = False):
+        self.expression = expression
+        self.raise_level = raise_level
+        self.positive = positive
+
+
+LOG_HIGHLIGHTS: List[Highlight] = [
+    Highlight(re.compile('disconnected', re.IGNORECASE)),
+    Highlight(re.compile('successfully', re.IGNORECASE), positive=True),
+    Highlight(re.compile('installing', re.IGNORECASE), positive=True),
+    Highlight(re.compile('dismounted', re.IGNORECASE)),
+    Highlight(re.compile('connected', re.IGNORECASE), positive=True),
+    Highlight(re.compile('installed', re.IGNORECASE), positive=True),
+    Highlight(re.compile('disabling', re.IGNORECASE)),
+    Highlight(re.compile('completed', re.IGNORECASE), positive=True),
+    Highlight(re.compile('exception', re.IGNORECASE), raise_level=logging.ERROR),
+    Highlight(re.compile('critical', re.IGNORECASE), raise_level=logging.CRITICAL),
+    Highlight(re.compile('starting', re.IGNORECASE), positive=True),
+    Highlight(re.compile('disabled', re.IGNORECASE)),
+    Highlight(re.compile('stopping', re.IGNORECASE)),
+    Highlight(re.compile('shutdown', re.IGNORECASE)),
+    Highlight(re.compile('warning', re.IGNORECASE), raise_level=logging.WARNING),
+    Highlight(re.compile('started', re.IGNORECASE), positive=True),
+    Highlight(re.compile('stopped', re.IGNORECASE)),
+    Highlight(re.compile('missing', re.IGNORECASE)),
+    Highlight(re.compile('failed', re.IGNORECASE)),
+    Highlight(re.compile('closed', re.IGNORECASE)),
+    Highlight(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
+    Highlight(re.compile('error', re.IGNORECASE), raise_level=logging.ERROR),
+    Highlight(re.compile('debug', re.IGNORECASE), raise_level=logging.DEBUG),
+    Highlight(re.compile(r'ORA-\d+'))
 ]
