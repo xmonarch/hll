@@ -9,8 +9,7 @@ from hllogs.levels import LOG_LEVELS, LogLevelRule
 
 class Item(object):
 
-    def __init__(self, value: str, is_token: bool = False, raise_level: int = logging.NOTSET,
-                 is_positive: bool = False):
+    def __init__(self, value: str, is_token: bool = False, raise_level: int = logging.INFO, is_positive: bool = False):
         self.value: str = value
         self.is_token: bool = is_token
         self.raise_level: int = raise_level

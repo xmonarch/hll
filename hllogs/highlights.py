@@ -9,7 +9,7 @@ class Highlight(object):
     raise_level: int
     positive: bool
 
-    def __init__(self, expression: Pattern, raise_level: int = logging.NOTSET, positive: bool = False):
+    def __init__(self, expression: Pattern, raise_level: int = logging.INFO, positive: bool = False):
         self.expression = expression
         self.raise_level = raise_level
         self.positive = positive
@@ -34,6 +34,7 @@ LOG_HIGHLIGHTS: List[Highlight] = [
     Highlight(re.compile('started', re.IGNORECASE), positive=True),
     Highlight(re.compile('stopped', re.IGNORECASE)),
     Highlight(re.compile('missing', re.IGNORECASE)),
+    Highlight(re.compile('severe', re.IGNORECASE), raise_level=logging.ERROR),
     Highlight(re.compile('failed', re.IGNORECASE)),
     Highlight(re.compile('closed', re.IGNORECASE)),
     Highlight(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
