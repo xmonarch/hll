@@ -57,12 +57,15 @@ def detect_in_string(value: str):
 
 
 def extract_json_attachments(value: str):
-    for possible_json in detect_in_string(value):
-        try:
-            parsed = json.loads(possible_json)
-            if len(parsed) > 0:
-                yield json.dumps(parsed, indent=3, sort_keys=False)
-        except ValueError:
-            # ignore errors, since it's apparently not a valid JSON, so won't be added to the
-            # list of displayed attachments
-            pass
+    pool: List[str] = [value]
+    while len(pool) > 0:
+        for possible_json in detect_in_string(pool.pop()):
+            try:
+                parsed = json.loads(possible_json)
+                if len(parsed) > 0:
+                    yield json.dumps(parsed, indent=3, sort_keys=False)
+
+            except ValueError:
+                # ignore errors, since it's apparently not a valid JSON, so won't be added to the
+                # list of displayed attachments
+                pool.append(possible_json[1:])
