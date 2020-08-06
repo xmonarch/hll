@@ -68,6 +68,10 @@ LOG_HIGHLIGHTERS: List[Highlighter] = [
     Highlighter(re.compile('fatal', re.IGNORECASE), raise_level=logging.FATAL),
     Highlighter(re.compile('error', re.IGNORECASE), raise_level=logging.ERROR),
     Highlighter(re.compile('debug', re.IGNORECASE), raise_level=logging.DEBUG),
+    # various standard log level descriptions
+    Highlighter(re.compile(r'\(II\)'), raise_level=logging.INFO),
+    Highlighter(re.compile(r'\(WW\)'), raise_level=logging.WARNING),
+    Highlighter(re.compile(r'\(EE\)'), raise_level=logging.ERROR),
     # ORACLE codes
     Highlighter(re.compile(r'ORA-\d+'))
 ]

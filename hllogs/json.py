@@ -63,8 +63,9 @@ def extract_json_attachments(value: str):
             try:
                 parsed = json.loads(possible_json)
                 if len(parsed) > 0:
+                    if type(parsed) is list and len(parsed) == 1:
+                        continue
                     yield json.dumps(parsed, indent=3, sort_keys=False)
-
             except ValueError:
                 # ignore errors, since it's apparently not a valid JSON, so won't be added to the
                 # list of displayed attachments
