@@ -1,4 +1,7 @@
 class Ascii:
+    """
+    ASCII escape constants for terminal output coloring
+    """
     END = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'

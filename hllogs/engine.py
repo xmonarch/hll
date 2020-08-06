@@ -3,74 +3,152 @@ import sys
 from typing import List
 
 from hllogs.ascii import Ascii
-from hllogs.highlights import LOG_HIGHLIGHTS, Highlight
+from hllogs.highlights import LOG_HIGHLIGHTERS, Highlighter
 from hllogs.levels import LOG_LEVELS, LogLevelRule
 
 
-class Item(object):
+class Token(object):
+    """
+    Objects representing a parsed on un-parsed token (literal)
+    """
 
-    def __init__(self, value: str, is_token: bool = False, raise_level: int = logging.NOTSET, is_positive: bool = False):
+    """
+    String value of the token
+    """
+    value: str
+
+    """
+    If True this token was not matched (yet?) to any highlighting rule
+    """
+    is_literal: bool
+
+    """
+    Log level requested by the token (by default logging.NOTSET is requested by literal tokens
+    """
+    raise_level: int
+
+    """
+    For highlighted token represents whether or not the token represents a positive or a negative information
+    """
+    positive: bool
+
+    def __init__(self, value: str, is_literal: bool = True, raise_level: int = logging.NOTSET, positive: bool = False):
         self.value: str = value
-        self.is_token: bool = is_token
+        self.is_literal: bool = is_literal
         self.raise_level: int = raise_level
-        self.is_positive: bool = is_positive
+        self.positive: bool = positive
 
 
-def highlight(value: str, escape: str, line_escapes: str) -> str:
-    return f"{escape}{value}{Ascii.END}{line_escapes}"
+def highlight(value: str, escape: str, level_escapes: str) -> str:
+    """
+    Highlight a given token
+    :param value: string contents of the token
+    :param escape: ASCII escapes relevant to the token
+    :param level_escapes: ASCII escapes relevant to the log level to resume after token
+    :return: escaped string contents of the token
+    """
+    return f"{escape}{value}{Ascii.END}{level_escapes}"
 
 
-def split(expression: Highlight, value: str) -> List[Item]:
-    results: List[Item] = []
+def split(highlighter: Highlighter, value: str) -> List[Token]:
+    """
+    Split a given string into tokens for the given highlight pattern
+    :param highlighter: highlighting object
+    :param value: string contents of the literal to be split
+    :return: a list of tokens as split by this highlighter, If the pattern is not matched and empty list is returned.
+    """
+    results: List[Token] = []
     position: int = 0
     matched: bool = False
-    for match in expression.expression.finditer(value):
+
+    # find all tokens matching expression
+    for match in highlighter.expression.finditer(value):
         matched = True
         if position < match.start():
-            results.append(Item(value[position:match.start()]))
-        results.append(Item(value[match.start():match.end()], is_positive=expression.positive, is_token=True,
-                            raise_level=expression.raise_level))
+            # append any trailing string contents as a literal token
+            results.append(Token(value[position:match.start()]))
+
+        # append the matched highlighted token with the details of the highlighter
+        results.append(Token(value[match.start():match.end()], positive=highlighter.positive, is_literal=False,
+                             raise_level=highlighter.raise_level))
+
+        # register current position for the next iteration
         position = match.end()
+
     if matched and position < len(value):
-        results.append(Item(value[position:]))
+        # append any left over string contents as a literal token
+        results.append(Token(value[position:]))
 
     return results
 
 
-def tokenize(item: Item) -> List[Item]:
+def tokenize(item: Token, start_index: int = 0) -> List[Token]:
+    """
+    Turn a single literal token into a list by processing it with all registered highlighters.
+    :param item: literal token
+    :param start_index: index of the highlighter to start with
+    :return: list of tokens in the order in which they should be joined with information needed for highlighting
+    """
     length: int = len(item.value)
-    if item.is_token or length < 4:
+    if not item.is_literal or length < 4:
+        # for non-literal or literals considered too short let's terminate here
         return [item]
     tokenized = []
-    for expression in LOG_HIGHLIGHTS:
-        parts = split(expression, item.value)
+
+    for index, highlighter in enumerate(LOG_HIGHLIGHTERS, start=start_index):
+        # attempt to split with the given pattern
+        parts = split(highlighter, item.value)
+
+        # find the first applicable highlighter that splits the string
         if len(parts) > 0:
+            # process all produced tokens
             for part in parts:
-                if part.is_token:
-                    tokenized.append(part)
+                if part.is_literal:
+                    # literal tokens are processed further
+                    tokenized.extend(tokenize(part, start_index=index + 1))
                 else:
-                    tokenized.extend(tokenize(part))
+                    # recognized tokens are simply added to the list
+                    tokenized.append(part)
             break
+
     return tokenized if len(tokenized) > 0 else [item]
 
 
-def join(tokens: List[Item], line: LogLevelRule) -> str:
+def join(tokens: List[Token], line: LogLevelRule) -> str:
+    """
+    Join a list of tokens into a string. For the highlighted tokens the coloring is applied.
+    :param tokens: list of parsed token
+    :param line: recognized log level rule
+    :return: a join list of contents of the tokens, with highlighted token being ASCII escaped accordingly
+    """
     complete: str = ''
     for token in tokens:
-        complete += highlight(token.value, line.positive if token.is_positive else line.negative,
-                              line.line) if token.is_token else token.value
+        complete += highlight(token.value, line.positive if token.positive else line.negative,
+                              line.line) if not token.is_literal else token.value
     return complete
 
 
 def process():
+    """
+    Process lines from input one by one and highlight configured phrases
+    """
     try:
         while True:
             try:
+                # read input
                 line: str = input()
-                items: List[Item] = tokenize(Item(line))
+
+                # parse line into tokens
+                items: List[Token] = tokenize(Token(line))
+
+                # determine maximum log level and assigned coloring rule based on levels requested by recognized tokens
                 log_level: LogLevelRule = LOG_LEVELS[max(items, key=lambda item: item.raise_level).raise_level]
+
+                # colorize according to the level rule
                 print(highlight(join(items, log_level), log_level.line, ''))
             except EOFError:
+                # once we run out of input we're done
                 break
     except KeyboardInterrupt:
+        # keyboard interrupt is perfectly fine
         sys.exit(0)
