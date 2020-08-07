@@ -177,7 +177,7 @@ def process():
                         print(highlight(xml, Ascii.MAGENTA, ''))
 
                 if args.json:
-                    # extract XML attachments
+                    # extract JSON attachments
                     for xml in extract_json_attachments(line):
                         print(highlight(" > JSON ", Ascii.MAGENTA + Ascii.REVERSE + Ascii.BOLD, ''))
                         print(highlight(xml, Ascii.MAGENTA, ''))

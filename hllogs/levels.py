@@ -49,7 +49,7 @@ DEBUG log level
 """
 LOG_LEVELS[logging.DEBUG] = LogLevelRule(
     [Ascii.GREEN],
-    [Ascii.BLUE],
+    [Ascii.GREEN, Ascii.UNDERLINE],
     [Ascii.RED]
 )
 
@@ -76,15 +76,6 @@ ERROR log level
 """
 LOG_LEVELS[logging.ERROR] = LogLevelRule(
     [Ascii.RED],
-    [Ascii.BOLD, Ascii.UNDERLINE, Ascii.GREEN],
-    [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]
-)
-
-"""
-FATAL log level
-"""
-LOG_LEVELS[logging.FATAL] = LogLevelRule(
-    [Ascii.BOLD, Ascii.RED],
     [Ascii.BOLD, Ascii.UNDERLINE, Ascii.GREEN],
     [Ascii.BOLD, Ascii.UNDERLINE, Ascii.YELLOW]
 )

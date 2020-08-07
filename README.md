@@ -7,9 +7,9 @@ Features:
 - highlights key phrases in the output
 - extracts and pretty-prints logged XML and JSON documents
 
-## Screenshots
+## Screenshot
 
-TBD
+![Sample](/screenshots/sample.png)
 
 ## Installation
 
