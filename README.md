@@ -9,6 +9,10 @@ Features:
 
 ## Screenshot
 
+Terminal running with [nord theme](https://www.nordtheme.com/). Various coloring 
+for different log levels. JSON and XML documents embedded in log messages are
+extracted and pretty printed for easier inspection.
+
 ![Sample](/screenshots/sample.png)
 
 ## Installation
@@ -24,3 +28,7 @@ Features:
 Pipe any input in:
 
 `$ tail -f ~/somelogfile.log | hllogs`
+
+For more details run:
+
+`$ hllogs --help`
