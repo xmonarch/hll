@@ -1,6 +1,6 @@
-# hllogs
+# hll
 
-hllogs (`h`igh`l`ight `logs`) is a simple log colorizer and highlighter written in python.
+hll (`h`igh`l`ight `l`ogs) is a simple log colorizer and highlighter written in python.
 
 Features:
 - attempts basic log level auto-detection and colorizes output accordingly
@@ -17,9 +17,9 @@ extracted and pretty printed for easier inspection.
 
 ## Installation
 
-`$ git clone https://github.com/xmonarch/hllogs.git`
+`$ git clone https://github.com/xmonarch/hll.git`
 
-`$ cd hllogs`
+`$ cd hll`
 
 `$ sudo pip install .`
 
@@ -27,8 +27,8 @@ extracted and pretty printed for easier inspection.
 
 Pipe any input in:
 
-`$ tail -f ~/somelogfile.log | hllogs`
+`$ tail -f ~/somelogfile.log | hll`
 
 For more details run:
 
-`$ hllogs --help`
+`$ hll --help`

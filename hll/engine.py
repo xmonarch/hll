@@ -3,11 +3,11 @@ import logging
 import sys
 from typing import List
 
-from hllogs.ascii import Ascii
-from hllogs.highlights import LOG_HIGHLIGHTERS, Highlighter
-from hllogs.json import extract_json_attachments
-from hllogs.levels import LOG_LEVELS, LogLevelRule
-from hllogs.xml import extract_xml_attachments
+from hll.ascii import Ascii
+from hll.highlights import LOG_HIGHLIGHTERS, Highlighter
+from hll.json import extract_json_attachments
+from hll.levels import LOG_LEVELS, LogLevelRule
+from hll.xml import extract_xml_attachments
 
 
 class Token(object):

@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict
 
-from hllogs.ascii import Ascii
+from hll.ascii import Ascii
 
 
 class LogLevelRule:
