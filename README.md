@@ -17,18 +17,22 @@ extracted and pretty printed for easier inspection.
 
 ## Installation
 
-`$ git clone https://github.com/xmonarch/hll.git`
-
-`$ cd hll`
-
-`$ sudo pip install .`
+```shell
+$ git clone https://github.com/xmonarch/hll.git`
+$ cd hll
+$ sudo pip install .
+```
 
 ## Usage
 
 Pipe any input in:
 
-`$ tail -f ~/somelogfile.log | hll`
+```shell
+$ tail -f ~/somelogfile.log | hll
+```
 
 For more details run:
 
-`$ hll --help`
+```shell
+$ hll --help
+```
