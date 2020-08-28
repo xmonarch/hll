@@ -18,7 +18,7 @@ extracted and pretty printed for easier inspection.
 ## Installation
 
 ```shell
-$ git clone https://github.com/xmonarch/hll.git`
+$ git clone https://github.com/xmonarch/hll.git
 $ cd hll
 $ sudo pip install .
 ```
