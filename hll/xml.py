@@ -4,7 +4,7 @@ import re
 XML = re.compile(r"(?P<xml_candidate>(<\?[^>]*\?>[\s\t\n]*)?<([a-zA-Z][a-zA-Z:\-0-9]*).*?</\3>)", re.DOTALL)
 
 # find white characters outside of XML tags
-XML_CLEANUP = re.compile(r"[\s\n]+(?![^><]*>)")
+XML_CLEANUP = re.compile(r"([\s\n]+)<")
 
 
 def indent(xml: str) -> str:
