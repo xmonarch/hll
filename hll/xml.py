@@ -58,4 +58,5 @@ def extract_xml_attachments(value: str):
     if match and len(match) > 0:
         for candidate in match:
             # clean-up / format / return
-            yield indent(XML_CLEANUP.sub('', (candidate[0])))
+            if candidate[0].count('<') > 2:
+                yield indent(XML_CLEANUP.sub('', (candidate[0])))
