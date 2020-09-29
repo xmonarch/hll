@@ -1,0 +1,8 @@
+[9/29/20 2:23:59:213 EDT] 00000001 SystemOut   CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 INFO        CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 WARNING     CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 ERROR       CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 DEBUG       CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 CRITICAL    CHFW0019I: The Transport Channel Service has started and stopped chain WCInboundAdminSecure.
+[9/29/20 2:23:59:213 EDT] 00000001 debug       Response as XML: <?xml version = "1.0"?><contact-info><name>john</name><age>15</age><phone>555-11-22</phone><phone>555-11-23</phone></contact-info>
+[9/29/20 2:23:59:213 EDT] 00000001 debug       Response as JSON: { "contact-info": { "name": "john", "age": 15, "phone": [ "555-11-22", "555-11-23" ] }}

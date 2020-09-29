@@ -53,10 +53,14 @@ def indent(xml: str) -> str:
 
 
 def extract_xml_attachments(value: str):
-    # find all possible XML documents
+    """
+    Find all possible XML documents in a string, however ignore documents with just one element - those usually mean
+    the XML was already printed to the log in a multi-line fashion.
+    """
     match = XML.findall(value)
     if match and len(match) > 0:
         for candidate in match:
-            # clean-up / format / return
+            # prevent one-element XML documents from being returned
             if candidate[0].count('<') > 2:
+                # clean-up / format / return
                 yield indent(XML_CLEANUP.sub('', (candidate[0])))
