@@ -20,7 +20,7 @@ extracted and pretty printed for easier inspection.
 ```shell
 $ git clone https://github.com/xmonarch/hll.git
 $ cd hll
-$ sudo pip install .
+$ pip install --user .
 ```
 
 ## Usage
